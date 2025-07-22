@@ -3,7 +3,23 @@ name = "otp-pass-import"
 version = "0.1.0"
 edition = "2024"
 authors = ["Marco 'Ocramoi' Toledo"]
-description = "A tool to import OTP secret files extracted using `extract-otp-secrets` into `pass`."
+description = "A tool to import OTP secret files extracted using `extract-otp-secrets` (https://github.com/scito/extract_otp_secrets) into `pass` (https://www.passwordstore.org)."
+documentation = "https://github.com/Ocramoi/otp-pass-import"
+homepage = "https://github.com/Ocramoi/otp-pass-import"
+repository = "https://github.com/Ocramoi/otp-pass-import"
+readme = "README.md"
+license = "GPL-3.0-or-later"
+license-file = "LICENSE"
+keywords = [
+  "pass",
+  "otp",
+  "2fa",
+  "passwords",
+  "password manager",
+  "password store",
+  "two-factor authentication",
+]
+categories = ["Security", "Utilities", "Command Line Utilities"]
 
 [dependencies]
 anstyle = "1.0.11"
@@ -14,17 +30,19 @@ dotenv = { version = "0.15.0", features = ["clap", "cli"] }
 libpass = "0.4.0"
 once_cell = "1.21.3"
 serde = { version = "1.0.219", features = ["derive"] }
-shellexpand = { version = "3.1.1", features = ["path", "os_str_bytes", "full", "bstr"] }
+shellexpand = { version = "3.1.1", features = [
+  "path",
+  "os_str_bytes",
+  "full",
+  "bstr",
+] }
 system-deps = "7.0.5"
 termion = "4.0.5"
 tokio = { version = "1", features = ["full"] }
 url-escape = "0.1.1"
 
 [package.metadata]
-supported_platforms = [
-    "linux",
-    "macos"
-]
+supported_platforms = ["linux", "macos"]
 
 [package.metadata.system-deps]
 pass = "0.1.0"
