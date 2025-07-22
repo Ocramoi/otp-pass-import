@@ -16,6 +16,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+    - name: Setup
+      run: apt-get update && apt-get install gnupg libgpg-error-dev
     - name: Build
       run: LIBGPG_ERROR_PREFIX="gpg-error" GPGME_PREFIX="gpgme-tool" cargo build --verbose
     - name: Run tests
