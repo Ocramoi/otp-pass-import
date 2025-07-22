@@ -1,5 +1,4 @@
 use clap::Parser;
-use dotenv::dotenv;
 use otp::OTPs;
 use pass::Pass;
 use termion::color;
@@ -32,12 +31,6 @@ struct CliInterface {
 
 fn main() {
     use otp::New;
-
-    // Load environment variables from .env file
-    if dotenv().is_err() {
-        eprintln!("Warning: Could not load env variables.");
-        std::process::exit(1);
-    }
 
     let cli = CliInterface::parse();
     let mut pass = match Pass::new(cli.pass_store_path.as_ref()) {

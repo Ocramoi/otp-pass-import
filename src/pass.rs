@@ -105,7 +105,7 @@ impl Pass {
                 .arg(issuer.clone());
         }
 
-        let pass_name = format!("OTP_{}", entry.name.clone());
+        let pass_name = format!("OTP/{}", entry.name.clone());
         let cmd_stdin = match _cmd
             .arg("--force")
             .arg("--account")
@@ -125,7 +125,16 @@ impl Pass {
 
         if let Some(mut stdin) = cmd_stdin {
             match stdin.write_all(format!("{}\n", entry.url).to_string().as_bytes()) {
-                Ok(_) => Ok(pass_name),
+                Ok(_) => {
+                    if _cmd.output().is_ok() {
+                        Ok(pass_name)
+                    } else {
+                        Err(Error::new(
+                            ErrorKind::Other,
+                            format!("Failed to execute pass command: {}", _cmd.output().err().unwrap()),
+                        ))
+                    }
+                },
                 Err(e) => Err(Error::new(ErrorKind::Other, format!("Failed to write to pass stdin: {}", e)))
             }
         } else {

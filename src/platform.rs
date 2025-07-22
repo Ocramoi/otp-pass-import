@@ -69,6 +69,8 @@ impl Platform {
     }
 
     pub fn pass_set_env(cmd: &mut Command) {
-        cmd.env(DPASS_STORE_PATH_ENV, P.default_store_path());
+        if let Ok(path) = std::env::var("PASSWORD_STORE_DIR") {
+            cmd.env("PASSWORD_STORE_DIR", path);
+        }
     }
 }
