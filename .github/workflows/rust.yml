@@ -8,6 +8,8 @@ on:
 
 env:
   CARGO_TERM_COLOR: always
+  LIBGPG_ERROR_PREFIX: "gpg-error"
+  GPGME_PREFIX: "gpgme-tool"
 
 jobs:
   build:
@@ -19,6 +21,6 @@ jobs:
     - name: Setup
       run: apt-get update && apt-get install gnupg libgpg-error-dev
     - name: Build
-      run: LIBGPG_ERROR_PREFIX="gpg-error" GPGME_PREFIX="gpgme-tool" cargo build --verbose
+      run: cargo build --verbose
     - name: Run tests
-      run: LIBGPG_ERROR_PREFIX="gpg-error" GPGME_PREFIX="gpgme-tool" cargo test --verbose
+      run: cargo test --verbose
