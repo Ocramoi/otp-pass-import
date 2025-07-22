@@ -17,6 +17,6 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Build
-      run: LIBGPG_ERROR_PREFIX="gpg-error" GPGME_PREFIX="gpgme-tool cargo build --verbose
+      run: LIBGPG_ERROR_PREFIX="gpg-error" GPGME_PREFIX="gpgme-tool" cargo build --verbose
     - name: Run tests
-      run: LIBGPG_ERROR_PREFIX="gpg-error" GPGME_PREFIX="gpgme-tool cargo test --verbose
+      run: LIBGPG_ERROR_PREFIX="gpg-error" GPGME_PREFIX="gpgme-tool" cargo test --verbose
