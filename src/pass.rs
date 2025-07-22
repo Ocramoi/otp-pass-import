@@ -66,8 +66,19 @@ impl Pass {
 
     pub fn add_entries(&mut self, entries: &OTPs) -> Result<(), Error> {
         for entry in entries.get_data() {
-            if let Err(e) = entry.save_to_pass(self) {
-                return Err(Error::new(
+            match entry.save_to_pass(self) {
+                Ok(pass_name) => {
+                    println!(
+                        "{}{}{} {}'{}'{}",
+                        style::Bold,
+                        "Added",
+                        style::Reset,
+                        color::Fg(color::Green),
+                        pass_name,
+                        color::Fg(color::Reset),
+                    );
+                },
+                Err(e) => return Err(Error::new(
                     ErrorKind::InvalidData,
                     format!(
                         "{}{}Error adding entry '{}': {}",
@@ -76,18 +87,8 @@ impl Pass {
                         entry.name,
                         e,
                     )
-                ));
-            } else {
-                println!(
-                    "{}{}{} {}'{}'{}",
-                    style::Bold,
-                    "Added",
-                    style::Reset,
-                    color::Fg(color::Green),
-                    entry.name,
-                    color::Fg(color::Reset),
-                );
-            }
+                )),
+            };
         }
         Ok(())
     }
@@ -98,14 +99,17 @@ impl Pass {
         Platform::pass_set_env(&mut _cmd);
         _cmd.arg("otp")
             .arg("insert");
+        let pass_name: String;
 
         if let Some(issuer) = entry.issuer.clone() {
             _cmd
                 .arg("--issuer")
                 .arg(issuer.clone());
+            pass_name = format!("OTP/{}/{}", issuer, entry.name.clone());
+        } else {
+            pass_name = format!("OTP/{}", entry.name.clone());
         }
 
-        let pass_name = format!("OTP/{}", entry.name.clone());
         let cmd_stdin = match _cmd
             .arg("--force")
             .arg("--account")
