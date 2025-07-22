@@ -67,4 +67,8 @@ impl Platform {
             .output()
             .is_ok()
     }
+
+    pub fn pass_set_env(cmd: &mut Command) {
+        cmd.env(DPASS_STORE_PATH_ENV, P.default_store_path());
+    }
 }

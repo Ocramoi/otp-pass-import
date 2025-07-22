@@ -2,6 +2,7 @@ use clap::Parser;
 use dotenv::dotenv;
 use otp::OTPs;
 use pass::Pass;
+use termion::color;
 
 pub mod platform;
 pub mod otp;
@@ -60,11 +61,19 @@ fn main() {
 
     match otps.save(&mut pass) {
         Ok(_) => {
-            println!("Successfully saved OTPs to pass store.");
+            println!(
+                "\n{}Successfully saved OTPs to pass store.{}",
+                color::Fg(color::Green),
+                color::Fg(color::Reset)
+            )
         }
         Err(e) => {
-            eprintln!("Error saving OTPs to pass store: {}", e);
-            std::process::exit(1);
+            eprintln!(
+                "\n{}Error saving OTPs to pass store: {}{}",
+                color::Fg(color::Red),
+                e,
+                color::Fg(color::Reset),
+            )
         }
     }
 }

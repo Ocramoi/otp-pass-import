@@ -1,8 +1,8 @@
 use std::path::PathBuf;
 use std::io::{Error, ErrorKind};
-use std::process::Command;
+use std::process::{Command, Stdio};
 use termion::{color, style};
-use crate::platform::P;
+use crate::platform::{Platform, P};
 use crate::otp::{OTPs, OTP};
 
 pub struct Pass {
@@ -66,31 +66,38 @@ impl Pass {
 
     pub fn add_entries(&mut self, entries: &OTPs) -> Result<(), Error> {
         for entry in entries.get_data() {
-            if let Err(e) = self.add_entry(entry) {
-                eprintln!(
-                    "{}{}Error adding entry '{}': {}",
-                    color::Fg(color::Red),
-                    style::Bold,
-                    entry.name,
-                    e,
-                );
+            if let Err(e) = entry.save_to_pass(self) {
+                return Err(Error::new(
+                    ErrorKind::InvalidData,
+                    format!(
+                        "{}{}Error adding entry '{}': {}",
+                        color::Fg(color::Red),
+                        style::Bold,
+                        entry.name,
+                        e,
+                    )
+                ));
             } else {
                 println!(
-                    "{}{}{} {}{}",
-                    color::Fg(color::Green),
+                    "{}{}{} {}'{}'{}",
                     style::Bold,
                     "Added",
+                    style::Reset,
+                    color::Fg(color::Green),
+                    entry.name,
                     color::Fg(color::Reset),
-                    entry.name
                 );
             }
         }
         Ok(())
     }
 
-    pub fn add_entry(&mut self, entry: &OTP) -> Result<(), Error> {
+    pub fn add_entry(&mut self, entry: &OTP) -> Result<String, Error> {
         use std::io::Write;
         let mut _cmd = Command::new("pass");
+        Platform::pass_set_env(&mut _cmd);
+        _cmd.arg("otp")
+            .arg("insert");
 
         if let Some(issuer) = entry.issuer.clone() {
             _cmd
@@ -98,19 +105,27 @@ impl Pass {
                 .arg(issuer.clone());
         }
 
-        let cmd_stdin = _cmd
-            .arg("otp")
-            .arg("insert")
+        let pass_name = format!("OTP_{}", entry.name.clone());
+        let cmd_stdin = match _cmd
             .arg("--force")
             .arg("--account")
             .arg(entry.name.clone())
-            .spawn()
-            .unwrap()
-            .stdin;
+            .arg(pass_name.clone())
+            .stdout(Stdio::null())
+            .stdin(Stdio::piped())
+            .spawn() {
+                Ok(cmd) => cmd.stdin,
+                Err(e) => {
+                    return Err(Error::new(
+                        ErrorKind::Other,
+                        format!("Failed to spawn pass command: {}", e),
+                    ));
+                }
+            };
 
         if let Some(mut stdin) = cmd_stdin {
-            match stdin.write_all(entry.url.to_string().as_bytes()) {
-                Ok(_) => Ok(()),
+            match stdin.write_all(format!("{}\n", entry.url).to_string().as_bytes()) {
+                Ok(_) => Ok(pass_name),
                 Err(e) => Err(Error::new(ErrorKind::Other, format!("Failed to write to pass stdin: {}", e)))
             }
         } else {

@@ -86,12 +86,8 @@ impl OTP {
         }
 
         match pass.add_entry(self) {
-            Ok(_) => Ok(format!(
-                "{}/{}",
-                pass.get_base_path()?,
-                self.name
-            ).to_string()),
             Err(e) => Err(Error::new(ErrorKind::InvalidData, format!("Error adding OTP:\t{e}"))),
+            ok => ok,
         }
     }
 
