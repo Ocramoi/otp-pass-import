@@ -10,7 +10,12 @@ repository = "https://github.com/Ocramoi/otp-pass-import"
 readme = "README.md"
 license = "GPL-3.0-or-later"
 keywords = ["pass", "otp", "2fa", "passwords", "password-manager"]
-categories = ["Security", "Utilities", "Command Line Utilities"]
+categories = [
+  "cryptography",
+  "config",
+  "command-line-interface",
+  "command-line-utilities",
+]
 
 [dependencies]
 anstyle = "1.0.11"
