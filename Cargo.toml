@@ -1,6 +1,6 @@
 [package]
 name = "otp-pass-import"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2024"
 authors = ["Marco 'Ocramoi' Toledo"]
 description = "A tool to import OTP secret files extracted using `extract-otp-secrets` (https://github.com/scito/extract_otp_secrets) into `pass` (https://www.passwordstore.org)."
