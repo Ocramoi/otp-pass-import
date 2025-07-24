@@ -18,8 +18,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Setup
-      run: sudo apt-get update && sudo apt-get install -y libgmime-3.0-dev libglib2.0-dev libglib2.0-dev-bin gnupg-utils gnupg2 gpgconf gpgrt-tools libgpgme-dev librust-gpgme-dev librust-gpgme-sys-dev libgpg-error-dev librust-libgpg-error-sys-dev libgpg-error0 
-gpgme1.0
+      run: sudo apt-get update && sudo apt-get install -y libgmime-3.0-dev libglib2.0-dev libglib2.0-dev-bin gnupg-utils gnupg2 gpgconf gpgrt-tools libgpgme-dev librust-gpgme-dev librust-gpgme-sys-dev libgpg-error-dev librust-libgpg-error-sys-dev libgpg-error0 gpgme1.0
     - name: Build
       run: cargo build --verbose
     - name: Run tests
