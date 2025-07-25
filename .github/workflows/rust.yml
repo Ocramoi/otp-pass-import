@@ -19,7 +19,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Setup
-      run: sudo apt-get update && sudo apt-get install -y libgmime-3.0-dev gnupg2 libgpgme-dev librust-gpgme-dev librust-gpgme-sys-dev libgpg-error-dev librust-libgpg-error-sys-dev libgpg-error0 librust-gpg-error-dev
+      run: sudo apt-get -y update && sudo apt-get install -y libgpgme-dev && sudo apt-get install -y libgpg-error-dev
     - name: Build
       run: cargo build --verbose
     - name: Run tests
