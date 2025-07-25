@@ -8,7 +8,7 @@ on:
 
 env:
   CARGO_TERM_COLOR: always
-  LIBGPG_ERROR_PREFIX: "gpg-error"
+  # LIBGPG_ERROR_PREFIX: "gpg-error"
   GPGME_PREFIX: "gpgme-tool"
 
 jobs:
