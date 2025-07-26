@@ -8,18 +8,16 @@ on:
 
 env:
   CARGO_TERM_COLOR: always
-  # LIBGPG_ERROR_PREFIX: "gpg-error"
-  GPGME_PREFIX: "gpgme-tool"
 
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: fedora-latest
 
     steps:
     - uses: actions/checkout@v4
     - name: Setup
-      run: sudo apt-get -y update && sudo apt-get install -y libgpgme-dev && sudo apt-get install -y libgpg-error0 libgpg-error-dev
+      run: sudo dnf check-update && sudo dnf install gnupg2 libgpg-error libgpg-error-devel
     - name: Build
       run: cargo build --verbose
     - name: Run tests
